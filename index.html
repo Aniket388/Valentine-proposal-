@@ -135,6 +135,22 @@
     .success-message { display: none; }
     .success-text { color: white; font-size: 1.2rem; margin-top: 10px; }
 
+    /* GitHub Link Style */
+    .github-link {
+      display: block;
+      margin-top: 30px;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .github-link:hover {
+      color: #fff;
+      transform: scale(1.05);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
     /* Particles */
     .particle { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.3); animation: float 20s infinite linear; z-index: 0; filter: blur(8px); }
     @keyframes float { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 50% { opacity: 0.6; } 100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; } }
@@ -187,6 +203,10 @@
         autoplay
         style="width: 100%; max-width: 300px; margin: 20px auto 0 auto;">
       </dotlottie-player>
+
+      <a href="https://github.com/Aniket388/Valentine-proposal-" target="_blank" class="github-link">
+        ⭐ Give it a Star on GitHub
+      </a>
     </div>
   </div>
 
