@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Be My Valentine?</title>
+  
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Pacifico&display=swap');
+
+    :root {
+      --primary: #ff4d6d;
+      --glass: rgba(255, 255, 255, 0.15);
+      --glass-border: rgba(255, 255, 255, 0.2);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      background: linear-gradient(135deg, #590d22, #800f2f, #ff4d6d);
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* --- BUTTON CONTAINER --- */
+    .btn-group {
+      width: 100%;
+      height: 150px;
+      position: relative; 
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 800;
+      text-transform: uppercase;
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
+      white-space: nowrap; 
+    }
+
+    /* --- ALIGNMENT --- */
+    #yesBtn {
+      background: #fff;
+      color: #c9184a;
+      z-index: 10;
+      position: absolute;
+      left: 30%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(1); 
+      transform-origin: center;
+    }
+
+    #noBtn {
+      background: rgba(0,0,0,0.3);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      z-index: 1;
+      position: absolute;
+      left: 70%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* --- INTRO SCREEN --- */
+    #intro { 
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: black; 
+      z-index: 999; 
+      display: flex; justify-content: center; align-items: center; 
+      transition: opacity 1s ease; 
+    }
+
+    #introBg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.8;
+      pointer-events: none; 
+    }
+
+    lottie-player {
+      width: 100%;
+      height: 100%;
+    }
+
+    .intro-content {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+      position: relative;
+      z-index: 10; 
+    }
+
+    .intro-text { 
+      font-family: 'Pacifico', cursive; color: #ff4d6d; font-size: 3rem; margin-bottom: 30px;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+    }
+
+    #startBtn {
+      background: #ff4d6d; color: white; padding: 12px 35px; font-size: 1.1rem; border-radius: 50px; cursor: pointer; border: none; animation: pulse 2s infinite; box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.7); }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 77, 109, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 109, 0); }
+    }
+
+    /* --- MAIN CARD --- */
+    .container {
+      background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 3rem; border-radius: 30px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); text-align: center; max-width: 90%; width: 500px; transform: translateY(30px); opacity: 0; transition: all 0.5s ease;
+      overflow: visible; 
+      position: relative; z-index: 10;
+    }
+
+    h1 { color: white; font-size: 2.5rem; line-height: 1.2; text-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+    .highlight { font-family: 'Pacifico', cursive; color: #ffb3c1; display: block; font-size: 3rem; margin-top: 10px; }
+
+    .visible { opacity: 1 !important; transform: translateY(0) !important; }
+    .success-message { display: none; }
+    .success-text { color: white; font-size: 1.2rem; margin-top: 10px; }
+
+    /* Particles */
+    .particle { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.3); animation: float 20s infinite linear; z-index: 0; filter: blur(8px); }
+    @keyframes float { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 50% { opacity: 0.6; } 100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; } }
+  </style>
+</head>
+<body>
+
+  <audio id="bgMusic" loop>
+    <source src="song.mp3" type="audio/mp3">
+  </audio>
+
+  <div id="intro">
+    <div id="introBg">
+      <lottie-player 
+        src="https://lottie.host/9f6189d7-7fee-4242-bd75-025dbedc7ba5/0Vv9ximeJl.json" 
+        background="transparent" 
+        speed="1" 
+        loop 
+        autoplay>
+      </lottie-player>
+    </div>
+
+    <div class="intro-content">
+      <div class="intro-text">Happy Valentine's Day</div>
+      <button id="startBtn">Tap to Open 💌</button>
+    </div>
+  </div>
+
+  <div id="particles"></div>
+
+  <div class="container" id="mainCard">
+    <div id="questionSection">
+      <h1>Will you be my <span class="highlight">Valentine?</span></h1>
+      
+      <div class="btn-group">
+        <button id="yesBtn">Yes! 💖</button>
+        <button id="noBtn">No</button>
+      </div>
+    </div>
+
+    <div class="success-message" id="successSection">
+      <h1>Yay! I knew it! ❤️</h1>
+      <p class="success-text">Best decision ever.</p>
+      
+      <dotlottie-player 
+        src="https://lottie.host/ce37619b-32cd-47a9-82d5-ce3fd25266c3/yIbbPt1m90.lottie" 
+        background="transparent" 
+        speed="1" 
+        loop 
+        autoplay
+        style="width: 100%; max-width: 300px; margin: 20px auto 0 auto;">
+      </dotlottie-player>
+    </div>
+  </div>
+
+  <script>
+    // 1. Setup Audio & Intro
+    const intro = document.getElementById('intro');
+    const startBtn = document.getElementById('startBtn');
+    const mainCard = document.getElementById('mainCard');
+    const bgMusic = document.getElementById('bgMusic');
+
+    startBtn.addEventListener('click', () => {
+      bgMusic.volume = 0.5; 
+      bgMusic.play().catch(error => console.log("Audio play failed:", error));
+      intro.style.opacity = '0';
+      setTimeout(() => {
+        intro.style.display = 'none';
+        mainCard.classList.add('visible');
+      }, 1000);
+    });
+
+    // 2. Logic
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const questionSection = document.getElementById('questionSection');
+    const successSection = document.getElementById('successSection');
+
+    let yesScale = 1; 
+
+    const noTexts = [
+      "No", "Are you sure?", "Really?", "Think again!", "Why?", "Pls?", "Sad...", "Eh?", "Stop", "Last Chance"
+    ];
+
+    noBtn.addEventListener('click', () => {
+      yesScale += 0.3; 
+      yesBtn.style.transform = `translate(-50%, -50%) scale(${yesScale})`;
+
+      const randomText = noTexts[Math.floor(Math.random() * noTexts.length)];
+      noBtn.innerText = randomText;
+
+      if (yesScale > 8) {
+        yesBtn.style.position = 'fixed';
+        yesBtn.style.top = '0';
+        yesBtn.style.left = '0';
+        yesBtn.style.width = '100vw';
+        yesBtn.style.height = '100vh';
+        yesBtn.style.transform = 'translate(0,0) scale(1)';
+        yesBtn.style.display = 'flex';
+        yesBtn.style.justifyContent = 'center';
+        yesBtn.style.alignItems = 'center';
+        yesBtn.style.fontSize = '5rem';
+        yesBtn.style.borderRadius = '0px';
+        yesBtn.innerText = "YES (There is no escape) ❤️";
+        noBtn.style.display = 'none';
+      }
+    });
+
+    yesBtn.addEventListener('click', () => {
+      questionSection.style.display = 'none';
+      successSection.style.display = 'block';
+    });
+
+    // 3. Particle Background
+    const particleContainer = document.getElementById('particles');
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      const size = Math.random() * 20 + 5 + 'px';
+      particle.style.width = size;
+      particle.style.height = size;
+      particle.style.left = Math.random() * 100 + 'vw';
+      const duration = Math.random() * 10 + 10 + 's';
+      const delay = Math.random() * 5 + 's';
+      particle.style.animationDuration = duration;
+      particle.style.animationDelay = delay;
+      particleContainer.appendChild(particle);
+    }
+  </script>
+</body>
+</html>
